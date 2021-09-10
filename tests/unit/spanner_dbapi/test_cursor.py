@@ -184,9 +184,7 @@ class TestCursor(unittest.TestCase):
                 "google.cloud.spanner_dbapi.cursor.Cursor._do_execute_update",
                 return_value=mock.MagicMock(),
             ):
-                cursor.execute(
-                    sql="UPDATE bogus row1=\"a\" WHERE row2=\"b\""
-                )
+                cursor.execute(sql='UPDATE bogus row1="a" WHERE row2="b"')
                 self.assertIsInstance(cursor._result_set, mock.MagicMock)
 
     def test_execute_statement(self):

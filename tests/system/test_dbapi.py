@@ -358,6 +358,7 @@ def test_ping(shared_instance, dbapi_database):
     conn.validate()
     conn.close()
 
+
 def test_update_non_autocommit(shared_instance, dbapi_database):
     setup_rows = """
 INSERT INTO contacts (contact_id, first_name, last_name, email)
@@ -371,6 +372,8 @@ VALUES
     cursor.execute(setup_rows)
     conn.commit()
 
-    cursor.execute("UPDATE contacts SET first_name='changed' WHERE email='get@domen.ru'")
+    cursor.execute(
+        "UPDATE contacts SET first_name='changed' WHERE email='get@domen.ru'"
+    )
     conn.commit()
     assert cursor.rowcount == 2
