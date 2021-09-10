@@ -206,13 +206,18 @@ class Cursor(object):
             # self._run_prior_DDL_statements()
             self.connection.run_prior_DDL_statements()
 
+            # Statements run with existing transaction
             if not self.connection.autocommit:
-                if classification == parse_utils.STMT_UPDATING:
-                    sql = parse_utils.ensure_where_clause(sql)
-
                 if classification != parse_utils.STMT_INSERT:
                     sql, args = sql_pyformat_args_to_spanner(sql, args or None)
 
+                # Update statement
+                if classification == parse_utils.STMT_UPDATING:
+                    sql = parse_utils.ensure_where_clause(sql)
+                    transaction = self.connection.transaction_checkout()
+                    self._do_execute_update(transaction, sql, args)
+
+                # Other statements that either are insert or should be treated as inserts
                 statement = Statement(
                     sql,
                     args,
@@ -233,6 +238,7 @@ class Cursor(object):
                         self.connection.retry_transaction()
                 return
 
+            # Statements run with out existing transactions
             if classification == parse_utils.STMT_NON_UPDATING:
                 self._handle_DQL(sql, args or None)
             elif classification == parse_utils.STMT_INSERT:
