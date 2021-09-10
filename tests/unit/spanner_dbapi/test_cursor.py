@@ -168,6 +168,27 @@ class TestCursor(unittest.TestCase):
                 self.assertIsInstance(cursor._result_set, mock.MagicMock)
                 self.assertIsInstance(cursor._itr, PeekIterator)
 
+    def test_execute_update_statement_autocommit_off(self):
+        from google.cloud.spanner_dbapi import parse_utils
+
+        connection = self._make_connection(self.INSTANCE, mock.MagicMock())
+        cursor = self._make_one(connection)
+        cursor.connection._autocommit = False
+        cursor.connection.transaction_checkout = mock.MagicMock(autospec=True)
+
+        with mock.patch(
+            "google.cloud.spanner_dbapi.parse_utils.classify_stmt",
+            return_value=parse_utils.STMT_UPDATING,
+        ):
+            with mock.patch(
+                "google.cloud.spanner_dbapi.cursor.Cursor._do_execute_update",
+                return_value=mock.MagicMock(),
+            ):
+                cursor.execute(
+                    sql="UPDATE bogus row1=\"a\" WHERE row2=\"b\""
+                )
+                self.assertIsInstance(cursor._result_set, mock.MagicMock)
+
     def test_execute_statement(self):
         from google.cloud.spanner_dbapi import parse_utils
 
