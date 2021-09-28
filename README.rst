@@ -1,5 +1,6 @@
-This is a fork for a bug fix. Waiting for corporate to sign the CLA. Once that is done, then a PR is made, and then accepted, this fork should be deleted
-=========================================================================================================================================================
+THIS IS A FORK 
+==============
+This exists for a bug fix. Waiting for corporate to sign the CLA. Once that is done, then a PR is made, and then accepted, this fork should be deleted.
 
 
 Python Client for Cloud Spanner
