@@ -20,7 +20,7 @@ import setuptools
 
 # Package metadata.
 
-name = "google-cloud-spanner"
+name = "google-cloud-spanner-tmp"
 description = "Cloud Spanner API client library"
 version = "3.9.0"
 # Should be one of:
