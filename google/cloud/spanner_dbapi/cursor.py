@@ -479,3 +479,5 @@ class Cursor(object):
                 null_ok=is_nullable == "YES", spanner_type=spanner_type
             )
         return column_details
+
+# This is a test
